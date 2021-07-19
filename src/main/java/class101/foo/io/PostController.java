@@ -31,12 +31,12 @@ public class PostController {
                 //페이지가 배열이랑 똑같이 0부터 시작이기 때문에 defaultValue 가 1이 들어오면 -1을 해줘야 0부터시작이라서 -1을 해준다.
         );
     }
-    
-
-
 
     // 3. 글 번호로 조회
-    
+    @GetMapping("/post/{id}")
+    public Post getPostById(@PathVariable("id") Long id){
+        return postRepository.findById(id).get(); // get()을 해주면 Post의 타입으로 나오게된다.
+    }
     // 4. 글 내용으로 검색 -> 해당 내용이 포함된 모든 글
 
 }
