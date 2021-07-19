@@ -1,12 +1,17 @@
 package class101.foo.io;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class PostController {
+
+    private static Integer PAGE_SIZE = 20;
 
     @Autowired
     PostRepository postRepository;
@@ -18,13 +23,18 @@ public class PostController {
     }
 
     // 2-1. 글 목록을 조회한다.
+    // 2-2 글 목록을 페이징하여 반환
     @GetMapping("/posts")
-    public List<Post> getPostList() {
-        return postRepository.findAll();
+    public Page<Post> getPostList(@RequestParam(defaultValue = "1") Integer page) { //defaultValue는 들어오는값이 없을때 기본값 설정
+        return postRepository.findAll(
+                PageRequest.of(page - 1, PAGE_SIZE, Sort.by("id").descending())
+                //페이지가 배열이랑 똑같이 0부터 시작이기 때문에 defaultValue 가 1이 들어오면 -1을 해줘야 0부터시작이라서 -1을 해준다.
+        );
     }
     
-    // 2-2 글 목록을 페이징하여 반환
-    
+
+
+
     // 3. 글 번호로 조회
     
     // 4. 글 내용으로 검색 -> 해당 내용이 포함된 모든 글
