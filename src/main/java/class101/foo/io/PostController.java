@@ -24,6 +24,9 @@ public class PostController {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    PostCacheService postCacheService;
+
     // 1. 글을 작성한다.
     @PostMapping("/post")
     public Post createPost(@RequestBody Post post) throws JsonProcessingException {
@@ -36,10 +39,15 @@ public class PostController {
     // 2-2 글 목록을 페이징하여 반환
     @GetMapping("/posts")
     public Page<Post> getPostList(@RequestParam(defaultValue = "1") Integer page) { //defaultValue는 들어오는값이 없을때 기본값 설정
-        return postRepository.findAll(
+        if(page.equals(1)){
+            return postCacheService.getFirstPostPage();
+        }else{
+            return postRepository.findAll(
                 PageRequest.of(page - 1, PAGE_SIZE, Sort.by("id").descending())
                 //페이지가 배열이랑 똑같이 0부터 시작이기 때문에 defaultValue 가 1이 들어오면 -1을 해줘야 0부터시작이라서 -1을 해준다.
-        );
+            );
+        }
+
     }
 
     // 3. 글 번호로 조회
