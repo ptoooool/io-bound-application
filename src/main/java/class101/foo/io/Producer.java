@@ -11,6 +11,6 @@ public class Producer {
     private RabbitTemplate rabbitTemplate;
 
     public void sendTo(String message){
-        this.rabbitTemplate.convertAndSend("POST_QUEUE", message);
+        this.rabbitTemplate.convertAndSend("CREATE_POST_QUEUE", message);
     }
 }
