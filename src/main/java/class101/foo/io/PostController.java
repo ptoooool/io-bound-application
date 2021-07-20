@@ -1,5 +1,7 @@
 package class101.foo.io;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +18,18 @@ public class PostController {
     @Autowired
     PostRepository postRepository;
 
+    @Autowired
+    Producer producer;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
     // 1. 글을 작성한다.
     @PostMapping("/post")
-    public Post createPost(@RequestBody Post post) {
-        return postRepository.save(post);
+    public Post createPost(@RequestBody Post post) throws JsonProcessingException {
+        String jsonPost = objectMapper.writeValueAsString(post); //String으로 넣어주려면 jackson이라는 라이브러리를 사용해줘야한다.
+        producer.sendTo(jsonPost);
+        return post; // return은 우선 아이디는 비어있는 null상태로 넘겨지긴한다
     }
 
     // 2-1. 글 목록을 조회한다.

@@ -8,3 +8,8 @@ spring:
     hibernate:
       dialect: org.hibernate.dialect.PostgreSQLDialect
       ddl-auto: update
+  rabbitmq:
+    host: 10.146.0.2 # rabbitMQ 인스턴스의 내부 ip이다. 각각의 인스턴스들이 내부에 붙을거기 때문
+    username: guest
+    password: guest
+    port: 5672
